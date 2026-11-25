@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2F5EE">
+<meta name="robots" content="noindex,nofollow">
+<title>Mecsekérc · Layers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400;500;600&family=Nunito:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5EE; --surface:#FFFFFF; --mist:#E4EBDD; --line:#D3DCCB;
+  --ink:#14241A; --muted:#4A5B4F; --leaf:#2A6638; --leaf-deep:#17402A; --brand:#77B657; --slate:#5D666F;
+  --soil:#432B1E; --loess:#B79461; --rock:#574F48; --sand:#CDBAA4; --deep:#302F2F;
+  --night:#0D0C0A; --night-2:#191712; --seam:#332F28; --bone:#EDE8DE; --dim:#B9B3A7;
+  --r-lg:24px; --r-md:16px;
+  --gut:16px; --wrap:1240px; --tab:62px;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+@media (min-width:720px){:root{--gut:28px;--r-lg:28px;--r-md:18px}}
+@media (min-width:1100px){:root{--gut:48px}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;scrollbar-color:var(--leaf) var(--mist)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--tab) + 26px + env(safe-area-inset-bottom,0px))}
+@media (min-width:960px){body{padding-bottom:0}}
+::selection{background:var(--brand);color:var(--ink)}
+:focus-visible{outline:2px solid var(--leaf);outline-offset:3px;border-radius:6px}
+img{display:block;max-width:100%}
+a{color:inherit;text-underline-offset:.2em}
+a,button{touch-action:manipulation}
+button{-webkit-user-select:none;user-select:none}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.022em;line-height:1.05;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gut)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;min-height:48px;font:600 .98rem/1 var(--body);padding:.9em 1.3em;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .16s ease-out,background-color .2s}
+.btn:active{transform:scale(.97)}
+.btn svg{width:1em;height:1em;flex:none}
+.btn--solid{background:var(--leaf);color:#fff}
+.btn--light{background:#fff;color:var(--ink)}
+.btn--ghost{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+.btn--brand{background:var(--brand);color:#10200B}
+@media (hover:hover) and (pointer:fine){
+  .btn--solid:hover{background:var(--leaf-deep)}
+  .btn--ghost:hover{box-shadow:inset 0 0 0 1.5px #fff}
+  .btn--brand:hover{background:#8ACB69}
+  .btn--light:hover{background:var(--mist)}
+}
+
+/* top bar */
+.top{position:relative;z-index:30;padding-top:max(10px,env(safe-area-inset-top,0px))}
+.top__bar{display:flex;align-items:center;gap:20px;background:rgba(255,255,255,.94);border-radius:999px;padding:8px 8px 8px 18px;box-shadow:0 1px 0 rgba(20,36,26,.05),0 14px 34px -18px rgba(20,36,26,.35)}
+.logo{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--slate);min-height:40px}
+.logo svg{width:40px;height:auto;color:var(--brand)}
+.logo span{font:600 1.26rem/1 "Nunito",var(--body);letter-spacing:-.01em}
+.top__links{display:none;gap:26px;margin-left:auto;font-size:.95rem;font-weight:500}
+.top__links a{text-decoration:none;color:var(--muted)}
+.lang{display:flex;gap:2px;margin-left:auto;font-size:.82rem;font-weight:600;background:var(--mist);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;font:inherit;color:var(--muted);min-width:40px;min-height:40px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed=true]{background:#fff;color:var(--ink)}
+.top .btn{display:none}
+@media (min-width:960px){
+  .top{position:sticky;top:0;padding-top:14px}
+  .top__links{display:flex}.lang{margin-left:0}.top .btn{display:inline-flex}
+  .top__bar{backdrop-filter:blur(10px);padding-left:22px}
+}
+@media (hover:hover) and (pointer:fine){.top__links a:hover{color:var(--ink)}}
+
+/* mobile tab bar */
+.tabbar{position:fixed;z-index:40;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));height:var(--tab);display:grid;grid-template-columns:1fr 1fr 1fr 1.25fr;align-items:center;gap:2px;padding:6px;background:rgba(255,255,255,.96);border-radius:22px;box-shadow:0 0 0 1px rgba(20,36,26,.07),0 18px 40px -14px rgba(10,20,14,.55)}
+.tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;border-radius:16px;text-decoration:none;font-size:.72rem;font-weight:600;color:var(--muted);-webkit-user-select:none;user-select:none;transition:background-color .16s,transform .16s ease-out}
+.tabbar a:active{background:var(--mist);transform:scale(.96)}
+.tabbar svg{width:21px;height:21px}
+.tabbar .tabbar__cta{background:var(--leaf);color:#fff;font-size:.9rem}
+.tabbar .tabbar__cta:active{background:var(--leaf-deep)}
+@media (min-width:960px){.tabbar{display:none}}
+
+/* where-am-I: the Layers tab on phones, the core on desktop */
+.tabcore{display:none;width:15px;height:21px;border-radius:5px;background:url(img/core.jpg) 50% calc(var(--y,25)*1%)/100% 560%;box-shadow:inset 0 0 0 1px rgba(20,36,26,.3)}
+.tabbar a.is-here{background:var(--mist);color:var(--ink)}
+.tabbar a.is-here svg{display:none}
+.tabbar a.is-here .tabcore{display:block}
+.tabbar a span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-inline:3px}
+.core{display:none}
+@media (min-width:1100px){
+  .core{display:block;position:fixed;z-index:25;left:16px;top:50%;width:14px;height:min(56vh,440px);transform:translateY(-50%);border-radius:999px;background:url(img/core.jpg) center/100% 100%;box-shadow:0 0 0 2px #fff,0 10px 26px -8px rgba(13,12,10,.6);opacity:0;transition:opacity .4s}
+  .core.is-on{opacity:1}
+  .core i{position:absolute;left:50%;top:calc(var(--y,0)*1%);width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(13,12,10,.5);transition:top .3s linear}
+  .core span{display:none;position:absolute;left:28px;top:calc(var(--y,0)*1%);transform:translateY(-50%);white-space:nowrap;font-size:.8rem;font-weight:600;padding:5px 10px;border-radius:999px;background:rgba(13,12,10,.86);color:#fff;transition:top .3s linear}
+}
+@media (min-width:1480px){.core span{display:block}}
+
+/* hero */
+.hero{padding-top:12px}
+.hero__frame{position:relative;border-radius:var(--r-lg);overflow:hidden;min-height:min(72svh,620px);display:grid;align-items:end;background:#31482f}
+.hero__frame>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero__frame::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(14,30,18,.86) 0%,rgba(14,30,18,.5) 48%,rgba(14,30,18,.12) 100%)}
+.hero__copy{position:relative;z-index:1;padding:22px 20px 24px;color:#fff}
+.hero h1{font-size:clamp(2.45rem,10.6vw,5.5rem);letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:#B9E59B}
+.hero__copy p{margin-top:16px;font-size:1.06rem;max-width:33em;color:#E9F1E4}
+.hero__cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.depths{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.depth{display:flex;gap:11px;align-items:center;background:var(--surface);border-radius:var(--r-md);padding:8px 12px 8px 8px;text-decoration:none;min-height:60px;transition:transform .16s ease-out}
+.depth:active{transform:scale(.97)}
+.depth i{flex:none;width:44px;height:44px;border-radius:11px;background:url(img/core.jpg) 50% calc(var(--y)*1%)/100% auto}
+.depth b{display:block;font:600 .98rem/1.15 var(--display)}
+.depth small{display:block;color:var(--muted);font-size:.82rem;line-height:1.25;margin-top:2px}
+.facts{display:grid;grid-template-columns:1fr 1fr;margin-top:18px;border-top:1px solid var(--line)}
+.facts div{padding:16px 12px 14px 0;border-bottom:1px solid var(--line)}
+.facts div:nth-child(even){padding-left:14px;border-left:1px solid var(--line)}
+.facts b{display:block;font:600 clamp(1.6rem,5.6vw,2.4rem)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.facts span{display:block;margin-top:6px;color:var(--muted);font-size:.9rem;line-height:1.35}
+@media (min-width:960px){
+  .hero{padding-top:18px}
+  .hero__frame{min-height:min(74vh,700px)}
+  .hero__frame::after{background:linear-gradient(90deg,rgba(14,30,18,.8) 0%,rgba(14,30,18,.45) 44%,rgba(14,30,18,0) 74%),linear-gradient(0deg,rgba(14,30,18,.5),rgba(14,30,18,0) 45%)}
+  .hero__copy{padding:clamp(28px,4.4vw,64px);max-width:780px}
+  .hero__copy p{font-size:1.14rem;margin-top:22px}.hero__cta{margin-top:30px}
+  .depths{position:absolute;z-index:2;right:clamp(18px,3vw,40px);top:50%;transform:translateY(-50%);width:262px;grid-template-columns:1fr;gap:10px;margin:0}
+  .depth{box-shadow:0 18px 30px -18px rgba(0,0,0,.55);transition:transform .45s var(--ease)}
+  .hero__box{position:relative}
+  .facts{grid-template-columns:repeat(4,1fr);margin-top:26px}
+  .facts div{padding:22px 24px 6px 0;border-bottom:0}
+  .facts div+div{padding-left:24px;border-left:1px solid var(--line)}
+  .facts b{font-size:clamp(1.7rem,3vw,2.5rem)}.facts span{font-size:.95rem;max-width:17em}
+}
+@media (hover:hover) and (pointer:fine){.depth:hover{transform:translateX(-6px)}}
+
+section,.block{padding-top:clamp(64px,10vw,132px)}
+[id]{scroll-margin-top:12px}
+@media (min-width:960px){[id]{scroll-margin-top:92px}}
+.head{display:grid;gap:14px;margin-bottom:clamp(22px,4vw,48px)}
+.head h2{font-size:clamp(1.95rem,7.4vw,3.5rem)}
+.head p{color:var(--muted);max-width:34em}
+@media (min-width:960px){.head{grid-template-columns:1fr 1fr;gap:var(--gut);align-items:end}.head p{justify-self:end}}
+
+/* services: accordion on phones, list plus preview on desktop */
+.svc__list{border-top:1px solid var(--line)}
+.svc__btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:60px;padding:14px 2px;border-bottom:1px solid var(--line);font:500 1.24rem/1.15 var(--display);letter-spacing:-.02em;color:var(--ink);-webkit-user-select:none;user-select:none}
+.svc__btn:focus-visible{outline:2px solid var(--leaf);outline-offset:-2px}
+.svc__btn i{position:relative;flex:none;width:30px;height:30px;border-radius:50%;background:var(--mist);transition:background-color .2s,transform .5s var(--ease)}
+.svc__btn i::before,.svc__btn i::after{content:"";position:absolute;left:9px;right:9px;top:14px;height:2px;border-radius:2px;background:var(--leaf-deep);transition:transform .45s var(--ease),background-color .2s}
+.svc__btn i::after{transform:rotate(90deg)}
+.svc__item.is-open .svc__btn i{background:var(--leaf)}
+.svc__item.is-open .svc__btn i::before,.svc__item.is-open .svc__btn i::after{background:#fff}
+.svc__item.is-open .svc__btn i::after{transform:rotate(0)}
+.svc__body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+.svc__item.is-open .svc__body{grid-template-rows:1fr}
+.svc__clip{overflow:hidden}
+.svc__in{padding:16px 0 22px;border-bottom:1px solid var(--line)}
+.svc__in img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:var(--r-md);background:var(--mist)}
+.svc__in p{margin-top:14px}
+.more h4{margin:18px 0 8px;font:600 .9rem/1.2 var(--body);color:var(--muted)}
+.more ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.more li{display:flex;gap:10px;align-items:baseline}
+.more li::before{content:"";flex:none;width:8px;height:8px;border-radius:2px;background:var(--brand);transform:rotate(45deg) translateY(-1px)}
+.more__ref{margin-top:16px;padding:12px 14px;border-radius:14px;background:var(--mist);font-size:.95rem}
+.more__ref b{font-weight:600}
+.more .btn{margin-top:16px}
+.svc__panel{display:none}
+@media (min-width:960px){
+  .svc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--gut);align-items:stretch}
+  .svc__body{display:none}
+  .svc__btn{min-height:0;padding:19px 4px;font-size:clamp(1.25rem,2vw,1.6rem);color:var(--muted);transition:color .25s,padding-left .45s var(--ease)}
+  .svc__btn i{width:11px;height:11px;border-radius:2px;background:var(--brand);transform:rotate(45deg) scale(0)}
+  .svc__btn i::before,.svc__btn i::after{display:none}
+  .svc__item.is-on .svc__btn{color:var(--ink);padding-left:14px}
+  .svc__item.is-on .svc__btn i,.svc__item.is-open .svc__btn i{background:var(--brand);transform:rotate(45deg) scale(1)}
+  .svc__panel{position:relative;display:grid;align-items:end;border-radius:var(--r-lg);overflow:hidden;background:var(--leaf-deep);min-height:540px;color:#fff}
+  .svc__panel>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s,transform 1.1s var(--ease)}
+  .svc__panel>img.is-out{opacity:0;transform:scale(1.04)}
+  .svc__panel::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(12,28,17,.92) 0%,rgba(12,28,17,.55) 44%,rgba(12,28,17,0) 72%);transition:background-color .4s}
+  .svc__panel.is-more::after{background-color:rgba(12,28,17,.74)}
+  .svc__text{position:relative;z-index:1;padding:clamp(22px,3vw,40px)}
+  .svc__text h3{font-size:clamp(1.5rem,2.6vw,2.2rem)}
+  .svc__text>p{margin-top:12px;max-width:36em;color:#E4EEDF}
+  .svc__more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+  .svc__panel.is-more .svc__more{grid-template-rows:1fr}
+  .svc__more>div{overflow:hidden}
+  .svc__panel .more h4{color:#B9E59B}
+  .svc__panel .more__ref{background:rgba(255,255,255,.14)}
+  .svc__toggle{margin-top:20px}
+}
+@media (hover:hover) and (pointer:fine){.svc__btn:hover{color:var(--ink)}}
+
+/* descent */
+.lead h2{font-size:clamp(2.1rem,8.4vw,4.4rem);max-width:12em}
+.lead p{margin-top:16px;color:var(--muted);max-width:34em;font-size:1.06rem}
+.ground{margin-top:clamp(28px,5vw,60px)}
+.cut{position:relative;height:clamp(104px,13.5vw,214px);background:linear-gradient(var(--a) 0 50%,var(--b) 50% 100%);overflow:hidden}
+.cut img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+.cut::after{content:"";position:absolute;inset:0;background:linear-gradient(var(--ta) 0%,transparent 42%,transparent 58%,var(--tb) 100%);pointer-events:none}
+.cut--top{height:clamp(190px,26vw,372px);background:linear-gradient(var(--bg) 0 60%,var(--soil) 60% 100%)}
+.cut--top img{object-position:50% 100%;-webkit-mask-image:linear-gradient(transparent 0,#000 30%,#000 88%,transparent);mask-image:linear-gradient(transparent 0,#000 30%,#000 88%,transparent)}
+.cut--top::after{background:linear-gradient(transparent 70%,rgba(30,18,10,.25) 100%)}
+.layer{position:relative;padding-block:clamp(40px,7vw,84px) clamp(52px,8vw,104px);color:var(--k);background:linear-gradient(var(--t),var(--t)),var(--tex) center/cover,var(--c)}
+.layer::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.16;mix-blend-mode:multiply;pointer-events:none}
+.layer>*{position:relative}
+.layer--soil{--c:var(--soil);--k:#FBF3EA;--sub:#E7D6C6;--t:rgba(30,18,10,.25);--tex:url(img/tex-soil.jpg);--rule:rgba(251,243,234,.34)}
+.layer--loess{--c:var(--loess);--k:#24180A;--sub:#3A2A12;--t:rgba(255,255,255,.14);--tex:url(img/tex-loess.jpg);--rule:rgba(36,24,10,.4)}
+.layer--rock{--c:var(--rock);--k:#F6F2EC;--sub:#E2DBD2;--t:rgba(20,18,16,.42);--tex:url(img/tex-rock.jpg);--rule:rgba(246,242,236,.34)}
+.layer--sand{--c:var(--sand);--k:#2A1C12;--sub:#43301F;--t:rgba(255,255,255,.18);--tex:url(img/tex-sand.jpg);--rule:rgba(42,28,18,.4)}
+.layer--deep{--c:var(--deep);--k:#F3EFE8;--sub:#D6D0C6;--t:rgba(10,9,8,.5);--tex:url(img/tex-deep.jpg);--rule:rgba(243,239,232,.3);padding-bottom:0}
+.lgrid{display:grid;gap:26px}
+.layer h2{font-size:clamp(2rem,8vw,3.9rem)}
+.ltag{display:inline-flex;align-items:center;gap:10px;margin-top:16px;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(255,255,255,.16);font-size:.88rem;font-weight:600;box-shadow:inset 0 0 0 1px var(--rule)}
+.layer--loess .ltag,.layer--sand .ltag{background:rgba(255,255,255,.34)}
+.ltag i{width:30px;height:30px;border-radius:50%;background:url(img/core.jpg) 50% calc(var(--y)*1%)/100% auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.llead{margin-top:18px;font-size:1.08rem;color:var(--sub);max-width:31em}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);margin-top:26px;border-top:1.5px solid var(--rule)}
+.nums div{padding:14px 10px 0 0}.nums div+div{padding-left:12px;border-left:1.5px solid var(--rule)}
+.nums b{display:block;font:600 clamp(1.3rem,5.4vw,2.3rem)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.nums span{display:block;margin-top:7px;font-size:.84rem;line-height:1.3;color:var(--sub)}
+.plist{list-style:none;margin:26px 0 0;padding:0;border-top:1.5px solid var(--rule)}
+.plist a{display:grid;grid-template-columns:1fr auto;gap:2px 14px;align-items:center;min-height:62px;padding:12px 0;border-bottom:1.5px solid var(--rule);text-decoration:none;transition:padding-left .45s var(--ease)}
+.plist b{font:600 1.14rem/1.2 var(--display);letter-spacing:-.015em}
+.plist span{grid-column:1;font-size:.9rem;color:var(--sub)}
+.plist svg{grid-column:2;grid-row:1/3;width:20px;height:20px}
+.plist a:active{padding-left:8px}
+.plist .row{display:grid;grid-template-columns:1fr auto;gap:2px 14px;align-items:center;min-height:62px;padding:12px 0;border-bottom:1.5px solid var(--rule)}
+.plist .row time{grid-column:2;grid-row:1/3;font-size:.86rem;font-weight:600;color:var(--sub);white-space:nowrap}
+@media (hover:hover) and (pointer:fine){.plist a:hover{padding-left:12px}}
+.card{background:var(--surface);color:var(--ink);border-radius:var(--r-lg);padding:10px;box-shadow:0 26px 50px -30px rgba(0,0,0,.6)}
+.card__txt{padding:14px 10px 10px}
+.card__txt h3{font-size:1.3rem}
+.card__row{display:flex;gap:14px;align-items:center}
+.card__row img{flex:none;width:72px;height:72px;border-radius:16px;object-fit:cover}
+.card__txt p{margin-top:8px;color:var(--muted);font-size:.98rem}
+.card ol{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:s}
+.card ol li{display:flex;gap:11px;align-items:baseline;font-weight:500;font-size:.97rem}
+.card ol li::before{counter-increment:s;content:counter(s);flex:none;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--mist);font:600 .78rem/1 var(--body);color:var(--leaf-deep)}
+.pic{position:relative;border-radius:calc(var(--r-lg) - 8px);overflow:hidden;background:#E9ECEB}
+.pic img{width:100%;height:100%;object-fit:cover}
+.note{position:absolute;top:12px;left:12px;z-index:2;font-size:.78rem;font-weight:600;padding:5px 9px;border-radius:999px;background:rgba(20,36,26,.74);color:#fff}
+.ba{aspect-ratio:16/10;--p:50%;-webkit-user-select:none;user-select:none}
+.ba img{position:absolute;inset:0;pointer-events:none}
+.ba__after{clip-path:inset(0 0 0 var(--p))}
+.ba__bar{position:absolute;top:0;bottom:0;left:var(--p);width:2px;background:#fff;transform:translateX(-1px);box-shadow:0 0 0 1px rgba(20,36,26,.12)}
+.ba__bar::after{content:"";position:absolute;top:50%;left:50%;width:46px;height:46px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314241A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center/22px no-repeat;transform:translate(-50%,-50%);box-shadow:0 6px 18px -6px rgba(20,36,26,.5)}
+.ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;touch-action:pan-y;font-size:16px}
+.ba__tag{position:absolute;bottom:12px;z-index:2;font:600 .8rem/1 var(--body);padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.94);color:var(--ink)}
+.ba__tag--l{left:12px}.ba__tag--r{right:12px}
+.duo{display:grid;grid-template-columns:1.25fr 1fr;gap:8px}
+.duo .pic{aspect-ratio:auto;height:clamp(190px,46vw,400px)}
+.news{list-style:none;margin:0;padding:6px 10px 4px}
+.news li{padding:16px 0;border-top:1px solid var(--line)}
+.news li:first-child{border-top:0}
+.news time{font-size:.84rem;font-weight:600;color:var(--leaf)}
+.news h3{font-size:1.2rem;line-height:1.15;margin-top:5px}
+.news p{color:var(--muted);font-size:.96rem;margin-top:6px}
+.tunnel{position:relative;margin-top:clamp(34px,6vw,72px);min-height:min(78svh,760px);display:grid;align-items:end;overflow:hidden;background:var(--night)}
+.tunnel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%}
+.tunnel::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,var(--deep) 0%,rgba(48,47,47,0) 22%),linear-gradient(0deg,var(--night) 3%,rgba(13,12,10,.55) 40%,rgba(13,12,10,0) 70%)}
+.tunnel__in{position:relative;z-index:2;padding-block:28px clamp(30px,6vw,70px);color:var(--bone)}
+.tunnel__in b{display:block;font:600 clamp(3.2rem,16vw,9rem)/.9 var(--display);letter-spacing:-.045em}
+.tunnel__in span{display:block;margin-top:10px;font-size:1.08rem;max-width:26em;color:#DAD5CA}
+@media (min-width:960px){
+  .lgrid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(36px,5vw,84px);align-items:start}
+  .lgrid--flip>:first-child{order:2}
+  .llead{font-size:1.14rem}
+  .nums b{font-size:clamp(1.7rem,2.6vw,2.4rem)}.nums span{font-size:.92rem}
+  .card{padding:12px}.card__txt{padding:18px 16px 14px}
+  .news{padding:10px 18px 8px}
+}
+
+/* night: history, careers, contact */
+.night{background:var(--night);color:var(--bone)}
+.night .head p{color:var(--dim)}
+.time{list-style:none;margin:0;padding:0;border-top:1px solid var(--seam)}
+.time li{display:grid;grid-template-columns:5.2em 1fr;gap:14px;padding:15px 0;border-bottom:1px solid var(--seam);align-items:baseline}
+.time b{font:600 1.1rem/1.3 var(--display);font-variant-numeric:tabular-nums;color:#A6DB86}
+.about{display:grid;gap:30px}
+.about h2{font-size:clamp(1.95rem,7.4vw,3.5rem)}
+.about__lead{font:500 clamp(1.12rem,1.7vw,1.4rem)/1.4 var(--display);letter-spacing:-.01em;margin-top:20px}
+.about__body{color:var(--dim);margin-top:14px;max-width:36em}
+.about__tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
+.about__tags span{font-size:.86rem;font-weight:500;padding:7px 12px;border-radius:999px;background:var(--night-2);box-shadow:inset 0 0 0 1px var(--seam)}
+.jobs{border-radius:var(--r-lg);background:var(--leaf-deep);color:#fff;padding:26px 20px;display:grid;gap:26px}
+.jobs h2{font-size:clamp(2.1rem,8.6vw,3.9rem)}
+.jobs p{color:#D6E4D0;margin-top:14px;max-width:30em}
+.jobs .btn{margin-top:22px}
+.jobs ul{list-style:none;margin:0;padding:0}
+.jobs li a{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;min-height:64px;padding:14px 2px;border-bottom:1px solid rgba(255,255,255,.22);text-decoration:none;transition:padding-left .45s var(--ease)}
+.jobs li:first-child a{border-top:1px solid rgba(255,255,255,.22)}
+.jobs li a:active{padding-left:8px}
+.jobs li b{font:600 clamp(1.2rem,2vw,1.6rem)/1.1 var(--display);letter-spacing:-.02em}
+.jobs li span{color:#B9E59B;font-size:.9rem}
+.jobs li svg{width:20px;height:20px}
+@media (hover:hover) and (pointer:fine){.jobs li a:hover{padding-left:12px}}
+footer{padding-block:clamp(60px,9vw,120px) 30px}
+.foot{display:grid;gap:30px}
+.foot h2{font-size:clamp(1.9rem,7vw,3rem)}
+.foot .btn{margin-top:20px}
+.foot h3{font:600 .95rem/1.2 var(--body);letter-spacing:0;margin-bottom:10px;color:var(--bone)}
+.foot p,.foot li{color:var(--dim);font-size:.97rem}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.foot li a{display:inline-flex;align-items:center;min-height:40px;text-decoration:none}
+.foot p a{text-decoration:underline}
+.legal{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:36px;padding-top:18px;border-top:1px solid var(--seam);font-size:.84rem;color:#9D978B}
+@media (min-width:960px){
+  .about{grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,96px)}
+  .jobs{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,80px);padding:clamp(30px,5vw,68px);align-items:center}
+  .foot{grid-template-columns:2fr 1.4fr 1fr 1fr;gap:var(--gut)}
+  .foot li a{min-height:30px}
+}
+@media (hover:hover) and (pointer:fine){.foot li a:hover{color:var(--bone);text-decoration:underline}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
+/* concept banner */
+.concept{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:var(--ink);color:#fff;text-align:center;font:600 .78rem/1.3 var(--body);padding:7px max(16px,env(safe-area-inset-right,0px)) 7px max(16px,env(safe-area-inset-left,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:61;background:var(--ink)}
+[id]{scroll-margin-top:calc(var(--bh,32px) + 12px)}
+@media (min-width:960px){.top{top:calc(var(--bh,32px) + env(safe-area-inset-top,0px))}[id]{scroll-margin-top:calc(var(--bh,32px) + 92px)}}
+.top{padding-top:10px}
+.tabbar{left:calc(10px + env(safe-area-inset-left,0px));right:calc(10px + env(safe-area-inset-right,0px))}
+.wrap{padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
+.plainlink{text-decoration:none}
+
+/* geothermal layer, language switch, five depth chips */
+.depths .depth:last-child:nth-child(odd){grid-column:1/-1}
+@media (min-width:960px){.depths .depth:last-child:nth-child(odd){grid-column:auto}.depths{gap:8px}.depth{min-height:54px;padding-block:6px}.depth i{width:40px;height:40px}}
+@media (min-width:960px) and (max-width:1279px){.top__links{gap:16px;font-size:.9rem}}
+@media (min-width:960px) and (max-width:1199px){.top .btn{display:none}}
+html[lang=hu] .tabbar a:not(.tabbar__cta){font-size:.66rem}
+.nw{white-space:nowrap}
+.geo{aspect-ratio:1800/1012}
+.geo svg{position:absolute;inset:0;width:100%;height:100%}
+.geo__l{position:absolute;z-index:2;font:600 .76rem/1.15 var(--body);padding:5px 9px;border-radius:999px;color:#fff;white-space:nowrap}
+.geo__l--hot{right:54.500%;top:57%;background:#C24E26}
+.geo__l--cold{left:53.500%;top:57%;background:#1F6CB0}
+.geo__l--plant{left:48.900%;top:22%;transform:translateX(-50%);background:rgba(20,36,26,.8)}
+.card__txt .fine{margin-top:14px;font-size:.9rem}
+.night{--rule:var(--seam);--sub:var(--dim)}
+#geothermal{--rule:var(--line);--sub:var(--muted)}
+.geoblock{display:grid;gap:24px}
+.geoblock h3{font-size:1.3rem;margin-bottom:14px}
+.geoblock .plist{margin-top:22px}
+.geoblock .btn{margin-top:22px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;border-top:1px solid var(--line)}
+.steps li{display:flex;gap:14px;align-items:baseline;padding:15px 0;border-bottom:1px solid var(--line);font:500 1.12rem/1.3 var(--display);letter-spacing:-.01em}
+.steps li::before{counter-increment:s;content:counter(s);flex:none;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:var(--leaf);color:#fff;font:600 .84rem/1 var(--body)}
+.depth--hot{box-shadow:inset 0 0 0 2px var(--brand)}
+.layer .fine{margin-top:18px;font-size:.95rem;color:var(--sub);max-width:34em}
+@media (min-width:960px){.geoblock{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--gut);align-items:start}.depth--hot{box-shadow:inset 0 0 0 2px var(--brand),0 18px 30px -18px rgba(0,0,0,.55)}.nums--first{margin-top:6px}}
+.know{display:grid;gap:26px}
+.know h2{font-size:clamp(2rem,8vw,3.9rem)}
+.know .llead{color:var(--dim)}
+@media (min-width:960px){.know{grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:clamp(36px,5vw,84px);align-items:start}.geo__l{font-size:.8rem}}
+</style>
+</head>
+<body>
+
+<div class="concept" id="concept" data-t="ui.concept">Student design concept for CECC 2026. Not the official Mecsekérc website.</div>
+
+<header class="top wrap">
+  <div class="top__bar">
+    <a class="logo" href="#top" aria-label="Mecsekérc home">
+      <svg viewBox="-2 0 104 46" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="10"><path d="M3 39 34 8l31 31"/><path d="M37 39 68 8l14 14"/></g><rect x="86.500" y="29.500" width="10" height="10" rx="1.600" transform="rotate(45 91.500 34.500)" fill="#5A5D62"/></svg>
+      <span>mecsekérc</span>
+    </a>
+    <nav class="top__links" aria-label="Main"><a href="#geothermal" data-t="nav.geo">Geothermal</a><a href="#services" data-t="nav.services">Services</a><a href="#layers" data-t="nav.layers">Where we work</a><a href="#careers" data-t="nav.careers">Careers</a><a href="#about" data-t="nav.about">About</a><a href="#contact" data-t="nav.contact">Contact</a></nav>
+    <div class="lang" role="group" aria-label="Language"><button data-lang="hu" aria-pressed="false">HU</button><button data-lang="en" aria-pressed="true">EN</button></div>
+    <a class="btn btn--solid" href="#contact" data-t="nav.quote">Request a quote</a>
+  </div>
+</header>
+
+<nav class="tabbar" aria-label="Quick navigation">
+  <a href="#services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span data-t="tab.services">Services</span></a>
+  <a href="#layers" id="tabLayer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5zM3 12.500l9 5 9-5M3 17l9 5 9-5"/></svg><i class="tabcore"></i><span>Layers</span></a>
+  <a href="#careers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.600-7 8-7s8 3 8 7"/></svg><span data-t="tab.careers">Careers</span></a>
+  <a class="tabbar__cta" href="#contact" data-t="tab.quote">Get a quote</a>
+</nav>
+
+<div class="core" id="core" aria-hidden="true"><i></i><span>Topsoil</span></div>
+
+<main id="top">
+  <div class="hero wrap">
+    <div class="hero__box">
+      <div class="hero__frame">
+        <img src="photos/meadow.jpg" alt="Open meadow at the foot of the Mecsek hills">
+        <div class="hero__copy">
+          <h1 data-t="hero.h1">We know the ground. <em>And the heat in it.</em></h1>
+          <p data-t="hero.p">Geothermal heat for Hungary's towns, built on seventy years of mining knowledge: we find the hot water, plan the wells and watch them for decades. In the service of sustainable development since 1955.</p>
+          <div class="hero__cta">
+            <a class="btn btn--light" href="#geothermal"><span data-t="hero.cta1">See our geothermal work</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+            <a class="btn btn--ghost" href="#careers" data-t="hero.cta2">Work with us</a>
+          </div>
+        </div>
+      </div>
+      <div class="depths">
+        <a class="depth" href="#surface"><i style="--y:27"></i><span><b data-t="chip.1">Surface</b><small data-t="chip.1s">We hand the land back</small></span></a>
+        <a class="depth" href="#water"><i style="--y:42"></i><span><b data-t="chip.2">Groundwater</b><small data-t="chip.2s">We keep watch</small></span></a>
+        <a class="depth" href="#rock"><i style="--y:56"></i><span><b data-t="chip.3">Rock</b><small data-t="chip.3s">We read it</small></span></a>
+        <a class="depth depth--hot" href="#heat"><i style="--y:70"></i><span><b data-t="chip.4">Heat</b><small data-t="chip.4s">We keep it flowing</small></span></a>
+        <a class="depth" href="#deep"><i style="--y:92"></i><span><b data-t="chip.5">Deep</b><small data-t="chip.5s">We build in it</small></span></a>
+      </div>
+    </div>
+    <div class="facts">
+      <div><b>1955</b><span data-t="fact.1">Founded in Pécs as Hungary's uranium mining company</span></div>
+      <div><b data-t="num.2450">2,450 m</b><span data-t="fact.2">depth of the geothermal wells at Békéscsaba</span></div>
+      <div><b>3</b><span data-t="fact.3">university agreements signed in 2026</span></div>
+      <div><b>110</b><span data-t="fact.4">specialists, more than half with a degree</span></div>
+    </div>
+  </div>
+
+  <section id="geothermal" class="wrap">
+    <div class="head">
+      <h2 data-t="g.h2">Heat from the ground. We keep it flowing.</h2>
+      <p data-t="g.p">Hungary sits on hot water and plans to double its use for heating by 2030. A geothermal plant needs at least two wells: one brings the hot water up, the other sends the cooled water back down. We find the water, plan both wells and watch them for as long as they run.</p>
+    </div>
+    <div class="geoblock">
+      <div class="card">
+          <div class="pic geo">
+            <img src="img/town.jpg" alt="Cut-away model of a town with a heating plant; one well brings hot water up, a second well sends cooled water back down">
+            <svg viewBox="0 0 1800 1012" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M850 440V800" stroke="#fff" stroke-width="17"/><path d="M912 440V610Q912 706 1004 760L1062 794" stroke="#fff" stroke-width="17"/>
+              <path d="M850 440V800" stroke="#D2562B" stroke-width="9"/><path d="M912 440V610Q912 706 1004 760L1062 794" stroke="#1F6CB0" stroke-width="9"/>
+              <path d="M850 500l-17 30h34z" fill="#D2562B" stroke="#fff" stroke-width="5"/><path d="M912 592l-17-30h34z" fill="#1F6CB0" stroke="#fff" stroke-width="5"/>
+            </svg>
+            <span class="note" data-t="ui.illu2">Illustration, not to scale</span>
+            <span class="geo__l geo__l--plant" data-t="geo.plant">Heating plant</span>
+            <span class="geo__l geo__l--hot" data-t="geo.hot">Hot water up</span>
+            <span class="geo__l geo__l--cold" data-t="geo.cold">Cooled water back</span>
+          </div>
+      </div>
+      <div>
+        <h3 data-t="l4.c.h3">What we do around a geothermal well.</h3>
+        <ol class="steps"><li data-t="l4.s1">Find and model the hot water layer</li><li data-t="l4.s2">Design both wells and handle the permits</li><li data-t="l4.s3">Measure flow, pressure and temperature for as long as the wells run</li></ol>
+        <ul class="plist">
+            <li><a href="#"><b data-t="p.bek.n">Békéscsaba</b><span data-t="p.bek.s">Geothermal district heating, built with Rotaqua</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#"><b data-t="p.tot.n">Tótkomlós</b><span data-t="p.tot.s">Geothermal heating system, with Rotaqua</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#"><b data-t="p.nag.n">Nagykanizsa and Újudvar</b><span data-t="p.nag.s">Geothermal engineering for MVM ERBE</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          </ul>
+        <a class="btn btn--solid" href="#contact"><span data-t="g.cta">Ask about your geothermal project</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="wrap">
+    <div class="head">
+      <h2 data-t="svc.h2">Six disciplines, one team.</h2>
+      <p data-t="svc.p">From the first borehole to the last tree planted, the same people plan, permit, build and measure. Pick a discipline to see what it covers.</p>
+    </div>
+    <div class="svc" id="svc"></div>
+  </section>
+
+  <section class="lead wrap" id="layers">
+    <h2 data-t="lead.h2">Now follow us down.</h2>
+    <p data-t="lead.p">What we know sits at every depth. Scroll through the ground, one layer at a time, and see what we do where.</p>
+  </section>
+
+  <div class="ground" id="ground">
+    <div class="cut cut--top"><img src="img/cut-0.jpg" alt="Cross-section of the ground: grass, roots and dark topsoil"></div>
+
+    <section class="layer layer--soil" id="surface" data-name="Topsoil" data-y="22,34" data-theme="#432B1E">
+      <div class="wrap lgrid">
+        <div>
+          <h2 data-t="l1.h2">At the surface, we hand the land back.</h2>
+          <span class="ltag"><i style="--y:27"></i><span data-t="l1.tag">Topsoil · where a project ends</span></span>
+          <p class="llead" data-t="l1.lead">A mine is only finished when the land can be used again. We reshape, seal, cover and replant spoil heaps and tailings, then prove with measurements that it holds.</p>
+          <ul class="plist">
+            <li><a href="#"><b data-t="p.gyo.n">Gyöngyösoroszi and Recsk</b><span data-t="p.gyo.s">Closing ore mines, restoring the land</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#"><b data-t="p.ura.n">Mecsek uranium mines</b><span data-t="p.ura.s">Remediation after four decades of mining</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#"><b data-t="p.ajk.n">Ajka</b><span data-t="p.ajk.s">Recultivating the red mud cassettes</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="pic ba" id="ba">
+            <img src="img/heap-before.jpg" alt="Bare grey spoil heap next to a village">
+            <img class="ba__after" src="img/heap-after.jpg" alt="The same heap, covered and green">
+            <div class="ba__bar"></div>
+            <span class="note" data-t="ui.illu">Illustration</span>
+            <span class="ba__tag ba__tag--l" data-t="ui.before">Before</span><span class="ba__tag ba__tag--r" data-t="ui.after">After</span>
+            <input type="range" min="0" max="100" value="50" aria-label="Before and after comparison">
+          </div>
+          <div class="card__txt">
+            <h3 data-t="l1.c.h3">The same hill, before and after.</h3>
+            <p data-t="l1.c.p">Drag the handle to see what a spoil heap becomes once we are done with it.</p>
+            <ol><li data-t="l1.s1">Reshape the heap to a stable slope</li><li data-t="l1.s2">Seal it against rain and seepage</li><li data-t="l1.s3">Cover it with soil and plant it</li><li data-t="l1.s4">Keep measuring the groundwater</li></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cut" style="--a:var(--soil);--b:var(--loess);--ta:rgba(30,18,10,.25);--tb:rgba(255,255,255,.14)"><img src="img/cut-1.jpg" alt="" loading="lazy"></div>
+
+    <section class="layer layer--loess" id="water" data-name="Loess and clay" data-y="35,46" data-theme="#B79461">
+      <div class="wrap lgrid lgrid--flip">
+        <div>
+          <h2 data-t="l2.h2">A few metres down, we watch the water.</h2>
+          <span class="ltag"><i style="--y:42"></i><span data-t="l2.tag">Loess and clay · where groundwater moves</span></span>
+          <p class="llead" data-t="l2.lead">What seeps into the ground ends up in somebody's drinking water. We map how it flows, sample it at the well and analyse it in our own accredited laboratory, which also tests for water utilities and other outside clients.</p>
+          <div class="nums">
+            <div><b>≈ 500</b><span data-t="l2.n1">monitoring wells</span></div>
+            <div><b data-t="num.1500">1,500</b><span data-t="l2.n2">samplings a year</span></div>
+            <div><b data-t="num.2500">2,500</b><span data-t="l2.n3">radiological measurements a year</span></div>
+          </div>
+          <ul class="plist">
+            <li><a href="#"><b data-t="p.mon.n">Uranium legacy monitoring</b><span data-t="p.mon.s">The long-term watch over the former Mecsek mines</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="pic" style="aspect-ratio:16/10"><img src="img/wells.jpg" alt="Cut-away model: three monitoring wells reach the groundwater next to a plant" loading="lazy"><span class="note" data-t="ui.illu">Illustration</span></div>
+          <div class="card__txt">
+            <div class="card__row"><img src="photos/team.jpg" alt="Two colleagues sampling a well from the field vehicle" loading="lazy"><h3 data-t="l2.c.h3">How a monitoring campaign runs.</h3></div>
+            <ol><li data-t="l2.s1">Sample the well, read the water on site</li><li data-t="l2.s2">Analyse preserved samples in the laboratory</li><li data-t="l2.s3">Process and model the data</li><li data-t="l2.s4">Deliver the evaluation report</li></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cut" style="--a:var(--loess);--b:var(--rock);--ta:rgba(255,255,255,.14);--tb:rgba(20,18,16,.42)"><img src="img/cut-2.jpg" alt="" loading="lazy"></div>
+
+    <section class="layer layer--rock" id="rock" data-name="Bedrock" data-y="47,60" data-theme="#574F48">
+      <div class="wrap lgrid">
+        <div>
+          <h2 data-t="l3.h2">In the rock, we read what is there.</h2>
+          <span class="ltag"><i style="--y:56"></i><span data-t="l3.tag">Bedrock · where the boreholes go</span></span>
+          <p class="llead" data-t="l3.lead">Before anyone builds, stores or mines, somebody has to know the ground. We drill, log the core, model the layers and explain what they mean: for power plants, for repositories, and for the raw materials the energy transition runs on.</p>
+          <div class="nums">
+            <div><b>118</b><span data-t="l3.n1">boreholes for Paks II</span></div>
+            <div><b data-t="num.14786">14,786 m</b><span data-t="l3.n2">drilled in total</span></div>
+            <div><b data-t="num.1950">1,950 m</b><span data-t="l3.n3">the deepest one</span></div>
+          </div>
+          <ul class="plist">
+            <li><a href="#"><b data-t="p.pak.n">Paks II</b><span data-t="p.pak.s">Site investigation for two new nuclear units</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#"><b data-t="p.bod.n">Boda Claystone Formation</b><span data-t="p.bod.s">Research for high level radioactive waste</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#"><b data-t="p.rec.n">Recsk-Lahóca</b><span data-t="p.rec.s">Raw material exploration</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          </ul>
+        </div>
+        <div class="duo">
+          <div class="pic"><img src="photos/drill.jpg" alt="Drill bit cutting through wet clay" loading="lazy"></div>
+          <div class="pic"><img src="photos/rig.jpg" alt="Drilling rig lit up at night" loading="lazy"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cut" style="--a:var(--rock);--b:var(--sand);--ta:rgba(20,18,16,.42);--tb:rgba(255,255,255,.18)"><img src="img/cut-3.jpg" alt="" loading="lazy"></div>
+
+    <section class="layer layer--sand" id="heat" data-name="Sandstone" data-y="62,77" data-theme="#CDBAA4">
+      <div class="wrap lgrid">
+        <div>
+          <h2 data-t="l4.h2">In the sandstone, the water is hot.</h2>
+          <span class="ltag"><i style="--y:70"></i><span data-t="l4.tag">Sandstone · where the hot water sits</span></span>
+          <p class="llead" data-t="l4.lead">This is the layer the hot water comes from, and the layer it has to go back into. Sending it back is the hard part of every geothermal plant. We spent five years researching it with the University of Pécs.</p>
+          <a class="btn btn--solid" style="margin-top:24px" href="#geothermal"><span data-t="hero.cta1">See our geothermal work</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></a>
+        </div>
+        <div>
+          <div class="nums nums--first">
+            <div><b data-t="num.2450">2,450 m</b><span data-t="l4.n1">well depth at Békéscsaba</span></div>
+            <div><b data-t="l4.n2b">5 years</b><span data-t="l4.n2">of reinjection research, 2017 to 2022</span></div>
+            <div><b>× 2</b><span data-t="l4.n3">Hungary's geothermal target for 2030</span></div>
+          </div>
+          <p class="fine" data-t="l4.c.p">The law asks every operator to record flow, pressure and temperature every day, and to send the cooled water back down wherever the ground allows.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="cut" style="--a:var(--sand);--b:var(--deep);--ta:rgba(255,255,255,.18);--tb:rgba(10,9,8,.5)"><img src="img/cut-4.jpg" alt="" loading="lazy"></div>
+
+    <section class="layer layer--deep" id="deep" data-name="Granite" data-y="80,99" data-theme="#302F2F">
+      <div class="wrap lgrid">
+        <div>
+          <h2 data-t="l5.h2">Deep inside, we build.</h2>
+          <span class="ltag"><i style="--y:92"></i><span data-t="l5.tag">Granite · where it has to hold</span></span>
+          <p class="llead" data-t="l5.lead">Some things need a place that stays safe for a very long time. We build it with mining methods: repositories for radioactive waste, storage caverns, pumped storage plants.</p>
+        </div>
+        <div>
+        <div class="pic" style="aspect-ratio:16/10"><img src="photos/survey.jpg" alt="Two surveyors and their shadows on a freshly excavated tunnel face" loading="lazy"></div>
+        <ul class="plist" style="margin-top:18px">
+          <li><a href="#"><b data-t="p.bat.n">Bátaapáti</b><span data-t="p.bat.s">Hungary's repository for low and intermediate level waste</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          <li><a href="#"><b data-t="p.jas.n">Jaslovské Bohunice</b><span data-t="p.jas.s">Interim waste store in Slovakia</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        </ul>
+        </div>
+      </div>
+      <div class="tunnel">
+        <img src="photos/tunnel.jpg" alt="Lit access tunnel driven through granite" loading="lazy">
+        <div class="tunnel__in wrap"><b data-t="num.5925">5,925 m</b><span data-t="l5.tunnel">of drifts driven into the granite at Bátaapáti. You have reached the bottom.</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="night">
+    <section id="careers" class="wrap">
+      <div class="jobs">
+        <div>
+          <h2 data-t="jobs.h2">Come down with us.</h2>
+          <p data-t="jobs.p">We are looking for people with fresh ideas who want real responsibility and room to grow. Experienced colleagues pass on what seventy years underground have taught us.</p>
+          <a class="btn btn--light" href="#contact" data-t="jobs.cta">Send an open application</a>
+        </div>
+        <ul>
+          <li><a href="#"><b data-t="job.1">Environmental engineer</b><span>Pécs</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          <li><a href="#"><b data-t="job.2">Geologist</b><span>Pécs</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          <li><a href="#"><b data-t="job.3">Surveyor</b><span>Pécs</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="research" class="wrap">
+      <div class="know">
+        <div>
+          <h2 data-t="know.h2">What we know, we pass on.</h2>
+          <p class="llead" data-t="know.lead">Keeping specialist knowledge alive and winning young people for it is our first priority. In 2026 we signed cooperation agreements with three universities: practice in our projects for students, research with their institutes.</p>
+          <ul class="plist">
+            <li class="row"><b data-t="uni.1">University of Miskolc</b><span data-t="uni.1s">Faculty of Earth and Environmental Sciences</span><time datetime="2026-02" data-t="uni.1d">Feb 2026</time></li>
+            <li class="row"><b data-t="uni.2">University of Pécs</b><span data-t="uni.2s">Practical experience for students</span><time datetime="2026-03" data-t="uni.2d">Mar 2026</time></li>
+            <li class="row"><b data-t="uni.3">University of Pannonia</b><span data-t="uni.3s">Joint research, young professionals</span><time datetime="2026-07" data-t="uni.3d">Jul 2026</time></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="pic" style="aspect-ratio:16/10"><img src="photos/lab.jpg" alt="A colleague loads samples into an instrument in our laboratory" loading="lazy"></div>
+          <ul class="news">
+            <li><time datetime="2026-09-25" data-t="news.1d">25 September 2026</time><h3 data-t="news.1">Our first European Researchers' Night</h3><p data-t="news.1p">Rock samples, drill cores and our CEO on dwarves, tunnels and what people get wrong about mining.</p></li>
+            <li><time datetime="2026-11" data-t="news.2d">November 2026</time><h3 data-t="news.2">University of Pécs Innovation Days</h3><p data-t="news.2p">Data is less like oil and more like soil: it only gives back when it is looked after.</p></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="wrap">
+      <div class="about">
+        <div>
+          <h2 data-t="about.h2">Seventy years of knowing the ground.</h2>
+          <p class="about__lead" data-t="about.lead">For four decades Mecsekérc mined and processed uranium ore. What stayed is the knowledge: how rock, water and tunnels behave, and how to leave a site in order.</p>
+          <p class="about__body" data-t="about.body">Batteries, wind turbines and heat pumps all start as raw materials, and every geothermal well, storage site and repository needs ground that somebody understands. That is the work we are here for. We work under ISO 9001 and ISO 14001 and run our own accredited testing laboratory.</p>
+          <div class="about__tags"><span data-t="tag.1">Mining</span><span data-t="tag.2">Geology</span><span data-t="tag.3">Hydrogeology</span><span data-t="tag.4">Geophysics</span><span data-t="tag.5">Geotechnics</span><span data-t="tag.6">Geodesy</span><span data-t="tag.7">Chemistry</span><span data-t="tag.8">Energy</span><span data-t="tag.9">Remediation</span><span data-t="tag.10">Soil mechanics</span><span data-t="tag.11">Cartography</span></div>
+        </div>
+        <ol class="time">
+          <li><b>1955</b><span data-t="time.1">Uranium ore mining and processing begins</span></li>
+          <li><b>1993</b><span data-t="time.2">Research for the disposal of radioactive waste</span></li>
+          <li><b>1997</b><span data-t="time.3">Mining ends, mine closure and remediation start</span></li>
+          <li><b>2000</b><span data-t="time.4">Environmental services and our own laboratory</span></li>
+          <li><b>2004</b><span data-t="time.5">First projects as general contractor</span></li>
+          <li><b>2005</b><span data-t="time.6">Underground spaces built beyond mining</span></li>
+          <li><b>2017</b><span data-t="time.7">Research on thermal water reinjection starts with the University of Pécs</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <footer id="contact" class="wrap">
+      <div class="foot">
+        <div><h2 data-t="foot.h2">Tell us about your site.</h2><p style="margin-top:10px;max-width:26em" data-t="foot.p">One call is enough to find out whether we can help.</p><a class="btn btn--brand" href="#contact" data-t="nav.quote">Request a quote</a></div>
+        <div><h3>MECSEKÉRC Zrt.</h3><p>7633 Pécs, Esztergár Lajos u. 19.<br>+36 72 535 370<br>mecsekerc@mecsekerc.hu<br><span data-t="foot.lab">Laboratories:</span> +36 30 830 1709</p></div>
+        <div><h3 data-t="foot.c">Company</h3><ul><li><a href="#about" data-t="foot.c1">About us</a></li><li><a href="#" data-t="foot.c2">References</a></li><li><a href="#" data-t="foot.c3">Events and exhibitions</a></li><li><a href="#careers" data-t="nav.careers">Careers</a></li></ul></div>
+        <div><h3 data-t="foot.d">Documents</h3><ul><li><a href="#" data-t="foot.d1">Quality assurance</a></li><li><a href="#" data-t="foot.d2">Tenders</a></li><li><a href="#" data-t="foot.d3">Public disclosure</a></li><li><a href="#" data-t="foot.d4">Privacy</a></li></ul></div>
+      </div>
+      <div class="legal"><span>© 2026 MECSEKÉRC Zrt.</span><span data-t="foot.legal">Student design prototype for the CECC 2026 case competition. Not the official website of MECSEKÉRC Zrt.</span></div>
+    </footer>
+  </div>
+</main>
+
+<script>
+/* ---------- language: English is in the page, Hungarian lives here ---------- */
+const HU={
+ 'nav.services':"Szolgáltatások",'nav.layers':"Hol dolgozunk",'nav.geo':"Geotermia",'nav.careers':"Karrier",'nav.about':"Rólunk",'nav.contact':"Kapcsolat",'nav.quote':"Árajánlatkérés",
+ 'tab.services':"Szolgáltatások",'tab.careers':"Karrier",'tab.quote':"Árajánlat",
+ 'hero.h1':"Ismerjük a földet. <em>És a benne rejlő hőt.</em>",
+ 'hero.p':"Geotermikus hő a magyar városoknak, hetven év bányászati tudására építve: megkeressük a forró vizet, megtervezzük a kutakat, és évtizedekig figyeljük őket. 1955 óta a fenntartható fejlődés szolgálatában.",
+ 'hero.cta1':"Geotermikus munkáink",'hero.cta2':"Dolgozzon velünk",
+ 'chip.1':"Felszín",'chip.1s':"Visszaadjuk a tájat",'chip.2':"Talajvíz",'chip.2s':"Folyamatosan figyeljük",'chip.3':"Kőzet",'chip.3s':"Megismerjük",'chip.4':"Hő",'chip.4s':"Áramlásban tartjuk",'chip.5':"Mélység",'chip.5s':"Építünk benne",
+ 'fact.1':"Pécsett alapítva, Magyarország uránbányászati vállalataként",'fact.2':"a békéscsabai geotermikus kutak mélysége",'fact.3':"egyetemi megállapodás 2026-ban",'fact.4':"szakember, több mint felük diplomás",
+ 'num.14786':"14 786 m",'num.1500':"1 500",'num.2500':"2 500",'num.1950':"1 950 m",'num.2450':"2 450 m",'num.5925':"5 925 m",
+ 'svc.h2':"Hat szakterület, egy csapat.",
+ 'svc.p':"Az első fúrástól az utolsó elültetett fáig ugyanaz a csapat tervez, engedélyeztet, kivitelez és mér. Válasszon egy szakterületet a részletekért.",
+ 'lead.h2':"Most jöjjön velünk a mélybe.",
+ 'lead.p':"Tudásunk minden mélységben jelen van. Görgessen végig a földön rétegről rétegre, és nézze meg, hol mit csinálunk.",
+ 'ui.illu':"Illusztráció",'ui.illu2':"Illusztráció, nem méretarányos",'ui.before':"Előtte",'ui.after':"Utána",
+ 'l1.h2':"A felszínen visszaadjuk a tájat.",'l1.tag':"Termőtalaj · ahol egy projekt véget ér",
+ 'l1.lead':"Egy bánya akkor zárul le igazán, amikor a terület újra használható. A meddőhányókat és zagytározókat átformáljuk, lezárjuk, talajjal fedjük és beültetjük, majd mérésekkel igazoljuk, hogy az eredmény tartós.",
+ 'p.gyo.n':"Gyöngyösoroszi és Recsk",'p.gyo.s':"Ércbányák bezárása, a táj helyreállítása",'p.ura.n':"Mecseki uránbányák",'p.ura.s':"Rekultiváció négy évtized bányászat után",'p.ajk.n':"Ajka",'p.ajk.s':"A vörösiszap-kazetták rekultivációja",
+ 'l1.c.h3':"Ugyanaz a domb, előtte és utána.",'l1.c.p':"Húzza el a csúszkát, és nézze meg, mivé válik egy meddőhányó, mire végzünk vele.",
+ 'l1.s1':"A hányó átformálása stabil rézsűvé",'l1.s2':"Lezárás a csapadék és a szivárgás ellen",'l1.s3':"Talajtakarás és növénytelepítés",'l1.s4':"A felszín alatti víz folyamatos mérése",
+ 'l2.h2':"Néhány méterrel lejjebb a vizet figyeljük.",'l2.tag':"Lösz és agyag · ahol a talajvíz mozog",
+ 'l2.lead':"Ami a talajba szivárog, az végül valakinek az ivóvizébe kerül. Feltérképezzük az áramlást, a kútnál mintát veszünk, és saját akkreditált laboratóriumunkban elemezzük, amely vízműveknek és más külső megrendelőknek is dolgozik.",
+ 'l2.n1':"megfigyelőkút",'l2.n2':"mintavétel évente",'l2.n3':"radiológiai mérés évente",
+ 'p.mon.n':"Uránipari monitoring",'p.mon.s':"A volt mecseki bányák hosszú távú megfigyelése",
+ 'l2.c.h3':"Így zajlik egy monitoringkampány.",'l2.s1':"Mintavétel a kútból, helyszíni vízmérés",'l2.s2':"A tartósított minták laboratóriumi elemzése",'l2.s3':"Adatfeldolgozás és modellezés",'l2.s4':"Az értékelő jelentés átadása",
+ 'l3.h2':"A kőzetből kiolvassuk, mi van odalent.",'l3.tag':"Alapkőzet · ahová a fúrások vezetnek",
+ 'l3.lead':"Mielőtt bárki építene, tárolna vagy bányászna, valakinek ismernie kell a földet. Fúrunk, leírjuk a fúrómagot, modellezzük a rétegeket, és elmagyarázzuk, mit jelentenek: erőművekhez, tárolókhoz és az energiaátmenethez szükséges nyersanyagok kutatásához.",
+ 'l3.n1':"fúrás a Paks II. számára",'l3.n2':"fúrás összesen",'l3.n3':"a legmélyebb fúrás",
+ 'p.pak.n':"Paks II.",'p.pak.s':"Telephelyvizsgálat két új atomerőművi blokkhoz",'p.bod.n':"Bodai Agyagkő Formáció",'p.bod.s':"Kutatás a nagy aktivitású hulladék elhelyezéséhez",'p.rec.n':"Recsk-Lahóca",'p.rec.s':"Nyersanyagkutatás",
+ 'l4.h2':"A homokkőben forró a víz.",'l4.tag':"Homokkő · ahol a forró víz rejlik",
+ 'l4.lead':"Ebből a rétegből jön a forró víz, és ide is kell visszajutnia. A visszasajtolás minden geotermikus rendszer legnehezebb része. Öt éven át kutattuk a Pécsi Tudományegyetemmel.",
+ 'g.h2':"Hő a föld mélyéből. Mi gondoskodunk róla, hogy áramoljon.",
+ 'g.p':"Magyarország forró vízen ül, és 2030-ra meg akarja duplázni a geotermikus hő hasznosítását. Egy geotermikus rendszerhez legalább két kút kell: az egyik felhozza a forró vizet, a másik visszajuttatja a lehűlt vizet a mélybe. Megkeressük a vizet, megtervezzük mindkét kutat, és figyeljük őket, amíg üzemelnek.",
+ 'g.cta':"Kérdezzen geotermikus projektjéről",
+ 'l4.n1':"kútmélység Békéscsabán",'l4.n2b':"5 év",'l4.n2':"visszasajtolási kutatás, <span class='nw'>2017–2022</span>",'l4.n3':"a hazai geotermikus cél 2030-ra",
+ 'p.bek.n':"Békéscsaba",'p.bek.s':"Geotermikus távfűtés, a Rotaquával közösen",'p.tot.n':"Tótkomlós",'p.tot.s':"Geotermikus fűtési rendszer, a Rotaquával közösen",'p.nag.n':"Nagykanizsa és Újudvar",'p.nag.s':"Geotermikus mérnöki munka az MVM ERBE számára",
+ 'geo.plant':"Hőközpont",'geo.hot':"Forró víz fel",'geo.cold':"Lehűlt víz vissza",
+ 'l4.c.h3':"Mit végzünk egy geotermikus kút körül.",'l4.s1':"A forró vizet adó réteg felkutatása és modellezése",'l4.s2':"Mindkét kút megtervezése és engedélyeztetése",'l4.s3':"Hozam, nyomás és hőmérséklet mérése, amíg a kutak üzemelnek",
+ 'l4.c.p':"A jogszabály minden üzemeltetőnek előírja a hozam, a nyomás és a hőmérséklet napi rögzítését, valamint a lehűlt víz visszasajtolását, amennyire a földtani adottságok engedik.",
+ 'l5.h2':"A mélyben építünk.",'l5.tag':"Gránit · ahol tartania kell",
+ 'l5.lead':"Vannak dolgok, amelyeknek nagyon hosszú időre biztonságos hely kell. Ezt bányászati módszerekkel alakítjuk ki: radioaktívhulladék-tárolókat, tárolókavernákat, szivattyús energiatározókat.",
+ 'p.bat.n':"Bátaapáti",'p.bat.s':"A kis és közepes aktivitású hulladékok hazai tárolója",'p.jas.n':"Jaslovské Bohunice",'p.jas.s':"Átmeneti hulladéktároló Szlovákiában",
+ 'l5.tunnel':"vágatot hajtottunk ki a bátaapáti gránitban. Ennél mélyebbre már nem megyünk.",
+ 'jobs.h2':"Jöjjön le velünk.",
+ 'jobs.p':"Innovatív szemléletű szakembereket keresünk, akik valódi felelősséget és fejlődési lehetőséget szeretnének. Tapasztalt kollégáink adják tovább, amit hetven év a föld alatt megtanított nekünk.",
+ 'jobs.cta':"Nyílt jelentkezés küldése",'job.1':"Környezetmérnök",'job.2':"Geológus",'job.3':"Földmérő",
+ 'know.h2':"Amit tudunk, továbbadjuk.",
+ 'know.lead':"A szakmai tudás megőrzése és a fiatalok megnyerése az első számú célunk. 2026-ban három egyetemmel kötöttünk együttműködési megállapodást: gyakorlat a projektjeinkben a hallgatóknak, közös kutatás az intézetekkel.",
+ 'uni.1':"Miskolci Egyetem",'uni.1s':"Műszaki Föld- és Környezettudományi Kar",'uni.1d':"2026. febr.",'uni.2':"Pécsi Tudományegyetem",'uni.2s':"Gyakorlati tapasztalat a hallgatóknak",'uni.2d':"2026. márc.",'uni.3':"Pannon Egyetem",'uni.3s':"Közös kutatás, szakember-utánpótlás",'uni.3d':"2026. júl.",
+ 'news.1d':"2026. szeptember 25.",'news.1':"Először a Kutatók Éjszakáján",'news.1p':"Kőzetminták, fúrómagok, és vezérigazgatónk előadása törpékről, tárnákról és a bányászattal kapcsolatos tévképzetekről.",
+ 'news.2d':"2026. november",'news.2':"PTE Innovációs Napok",'news.2p':"Az adat nem olaj, hanem termőtalaj: csak akkor hoz eredményt, ha gondozzuk.",
+ 'about.h2':"Hetven éve ismerjük a földet.",
+ 'about.lead':"A Mecsekérc négy évtizeden át uránércet bányászott és dolgozott fel. Ami megmaradt, az a tudás: hogyan viselkedik a kőzet, a víz és a vágat, és hogyan kell rendben hátrahagyni egy területet.",
+ 'about.body':"Az akkumulátor, a szélturbina és a hőszivattyú is nyersanyagból készül, és minden geotermikus kúthoz, tárolóhoz és hulladéktárolóhoz kell valaki, aki ismeri a földet. Ezért vagyunk itt. ISO 9001 és ISO 14001 szerint dolgozunk, és saját akkreditált vizsgálólaboratóriumot működtetünk.",
+ 'tag.1':"Bányászat",'tag.2':"Geológia",'tag.3':"Hidrogeológia",'tag.4':"Geofizika",'tag.5':"Geotechnika",'tag.6':"Geodézia",'tag.7':"Vegyészet",'tag.8':"Energetika",'tag.9':"Rekultiváció",'tag.10':"Talajmechanika",'tag.11':"Térképészet",
+ 'time.1':"Megindul az uránérc bányászata és feldolgozása",'time.2':"Kutatás a radioaktív hulladékok elhelyezéséért",'time.3':"Véget ér a bányászat, indul a bányabezárás és a rekultiváció",'time.4':"Környezetvédelmi tevékenység és saját vizsgálólaboratórium",'time.5':"Első fővállalkozási projektek",'time.6':"Nem bányászati célú földalatti térkiképzés",'time.7':"Termálvíz-visszasajtolási kutatás indul a Pécsi Tudományegyetemmel",
+ 'foot.h2':"Meséljen a területéről.",'foot.p':"Egy telefonhívás elég ahhoz, hogy kiderüljön, tudunk-e segíteni.",'foot.lab':"Vizsgálólaborok:",
+ 'foot.c':"Cégünk",'foot.c1':"Rólunk",'foot.c2':"Referenciák",'foot.c3':"Események és kiállítások",'foot.d':"Dokumentumok",'foot.d1':"Minőségbiztosítás",'foot.d2':"Pályázatok",'foot.d3':"Közzététel",'foot.d4':"Adatvédelem",
+ 'ui.concept':"Hallgatói dizájnkoncepció a CECC 2026 versenyre. Nem a Mecsekérc hivatalos weboldala.",
+ 'foot.legal':"Hallgatói dizájnprototípus a CECC 2026 esettanulmány-versenyre. Nem a MECSEKÉRC Zrt. hivatalos weboldala."
+};
+const UI={
+ en:{covers:'What it covers',ref:'Reference:',ask:'Ask about this service',more:'More about this',less:'Show less',layers:'Layers',surface:'Surface',title:'Mecsekérc · Layers'},
+ hu:{covers:'Mit tartalmaz',ref:'Referencia:',ask:'Érdeklődöm a szolgáltatásról',more:'Részletek',less:'Kevesebb',layers:'Rétegek',surface:'Felszín',title:'Mecsekérc · Rétegek'}
+};
+const LAYER_HU={'Topsoil':'Termőtalaj','Loess and clay':'Lösz és agyag','Bedrock':'Alapkőzet','Sandstone':'Homokkő','Granite':'Gránit'};
+let lang='en';
+const li=()=>lang==='hu'?1:0;
+
+/* ---------- services: [English, Hungarian] ---------- */
+const W='', F='';   // service photos are local files now
+const SVC=[
+ {t:['Geological exploration','Földtani kutatás'],
+  b:['Geological, hydrogeological and raw material exploration, from the first survey line to the drill core on the table. That includes the hot water layers geothermal plants draw on.','Földtani, vízföldtani és ásványinyersanyag-kutatás az első mérési vonaltól az asztalon fekvő fúrómagig. Ide tartoznak a geotermikus rendszerek forró vizet adó rétegei is.'],
+  m:[['Core drilling and borehole logging','Geophysical surveys','3D geological and groundwater models'],['Magfúrás és fúrólyuk-szelvényezés','Geofizikai mérések','3D földtani és vízföldtani modellek']],
+  r:['Paks II site investigation','Paks II. telephelyvizsgálat'],img:'photos/svc-1.jpg'},
+ {t:['Special civil engineering','Speciális mélyépítés'],
+  b:['Underground spaces built with mining methods: repositories for radioactive waste, gas storage caverns, pumped storage plants.','Bányászati módszerekkel kialakított földalatti terek: radioaktívhulladék-tárolók, gáztárolók, szivattyús energiatározók.'],
+  m:[['Tunnels, drifts and chambers','Rock support and lining','Research for waste disposal sites'],['Vágatok, alagutak és kamrák','Kőzetbiztosítás és falazat','Hulladéktároló-telephelyek kutatása']],
+  r:['Bátaapáti repository','Bátaapáti tároló'],img:'photos/svc-2.jpg'},
+ {t:['Environmental protection','Környezetvédelem'],
+  b:['We repair the damage left by deep and open-cast mining, and we protect drinking water sources with precise mapping and continuous monitoring.','Helyreállítjuk a mélyműveléses és külfejtéses bányászat okozta károkat, és pontos feltérképezéssel, folyamatos megfigyeléssel védjük az ivóvízbázisokat.'],
+  m:[['Remediation and landscaping of mine sites','Protection of drinking water sources','Environmental damage assessment and clean-up'],['Bányaterületek rekultivációja és tájrendezése','Ivóvízbázisok védelme','Környezeti kárfelmérés és kármentesítés']],
+  r:['Gyöngyösoroszi and Recsk mine closure','Gyöngyösoroszi és Recsk bányabezárása'],img:'photos/svc-3.jpg'},
+ {t:['Engineering services','Mérnöki szolgáltatások'],
+  b:['Design, permitting and expert work under one roof, from geothermal heating systems to soil mechanics for roads and railways.','Tervezés, engedélyeztetés és szakértői munka egy kézben, a geotermikus fűtési rendszerektől az utak és vasutak talajmechanikájáig.'],
+  m:[['Design and permitting','Soil mechanics and geotechnics','Hydrogeological modelling'],['Tervezés és engedélyeztetés','Talajmechanika és geotechnika','Vízföldtani modellezés']],
+  r:['Geothermal engineering for MVM ERBE at Nagykanizsa and Újudvar','Geotermikus mérnöki munka az MVM ERBE számára Nagykanizsán és Újudvaron'],img:'photos/svc-4.jpg'},
+ {t:['General contracting','Generálkivitelezés'],
+  b:['Complex investments delivered as one package, among them geothermal heating systems for towns. Our engineers bring long practice in leading large projects.','Komplex beruházások egy kézből, köztük városi geotermikus fűtési rendszerek. Mérnökeink nagy gyakorlattal vezetnek nagy projekteket.'],
+  m:[['One contract from plan to handover','Our own project management','Trusted partner companies'],['Egy szerződés a tervtől az átadásig','Saját projektvezetés','Megbízható partnercégek']],
+  r:['Geothermal heating in Békéscsaba and Tótkomlós, with Rotaqua','Geotermikus fűtés Békéscsabán és Tótkomlóson, a Rotaquával közösen'],img:'photos/svc-5.jpg'},
+ {t:['Testing laboratory','Vizsgálólaboratórium'],
+  b:['Our accredited laboratory (NAH-1-1370/2024) covers sampling, radiometry, chemistry, environmental geology and soil mechanics.','Akkreditált laboratóriumunk (NAH-1-1370/2024) a mintavétel, a radiometria, a kémia, a környezetföldtan és a talajmechanika területén működik.'],
+  m:[['Sampling in the field','Radiometry and water chemistry','Soil mechanics tests'],['Helyszíni mintavétel','Radiometria és vízkémia','Talajmechanikai vizsgálatok']],
+  r:['Drinking water radiology for utilities','Ivóvíz-radiológia vízművek számára'],img:'photos/svc-6.jpg'}
+];
+const ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const more=s=>`<div class="more"><h4>${UI[lang].covers}</h4><ul>${s.m[li()].map(x=>`<li>${x}</li>`).join('')}</ul><p class="more__ref"><b>${UI[lang].ref}</b> ${s.r[li()]}</p><a class="btn btn--brand" href="#contact">${UI[lang].ask} ${ARROW}</a></div>`;
+const svc=document.getElementById('svc'), wide=matchMedia('(min-width:960px)');
+svc.innerHTML=`<div class="svc__list">${SVC.map((s,i)=>`<div class="svc__item${i===0?' is-on is-open':''}" data-i="${i}"><button class="svc__btn" aria-expanded="${i===0}"><span class="svc__name"></span><i></i></button><div class="svc__body"><div class="svc__clip"><div class="svc__in"><img ${i?'loading="lazy" ':''}src="${W+s.img+F}" alt=""><p class="svc__p"></p><div class="svc__m"></div></div></div></div></div>`).join('')}</div>
+<div class="svc__panel" aria-live="polite"><img id="pA" src="${W+SVC[0].img+F}" alt=""><img id="pB" class="is-out" src="${W+SVC[1].img+F}" alt=""><div class="svc__text"><h3 id="pT"></h3><p id="pP"></p><div class="svc__more"><div id="pM"></div></div><button class="btn btn--light svc__toggle" id="pX" aria-expanded="false"></button></div></div>`;
+const items=[...svc.querySelectorAll('.svc__item')], panel=svc.querySelector('.svc__panel'); let cur=0, front=pA;
+function fill(i){ const s=SVC[i]; pT.textContent=s.t[li()]; pP.textContent=s.b[li()]; pM.innerHTML=more(s); }
+function paintServices(){
+  items.forEach((el,i)=>{ const s=SVC[i]; el.querySelector('.svc__name').textContent=s.t[li()]; el.querySelector('.svc__p').textContent=s.b[li()]; el.querySelector('.svc__m').innerHTML=more(s); });
+  fill(cur); pX.textContent=panel.classList.contains('is-more')?UI[lang].less:UI[lang].more;
+}
+function select(i){
+  if(i===cur) return; cur=i; items.forEach((el,k)=>el.classList.toggle('is-on',k===i));
+  const back=front===pA?pB:pA, src=W+SVC[i].img+F;
+  if(front.getAttribute('src')!==src){ back.src=src; back.classList.remove('is-out'); front.classList.add('is-out'); front=back; }
+  fill(i);
+}
+function setMore(on){ panel.classList.toggle('is-more',on); pX.setAttribute('aria-expanded',on); pX.textContent=on?UI[lang].less:UI[lang].more; }
+items.forEach((el,i)=>{ const b=el.querySelector('button');
+  el.addEventListener('mouseenter',()=>{ if(wide.matches){ if(i!==cur) setMore(false); select(i); } });
+  b.addEventListener('click',()=>{
+    if(wide.matches){ const same=i===cur; select(i); setMore(same?!panel.classList.contains('is-more'):true); return; }
+    const open=el.classList.contains('is-open');
+    items.forEach(x=>{x.classList.remove('is-open');x.querySelector('button').setAttribute('aria-expanded',false)});
+    if(!open){ el.classList.add('is-open'); b.setAttribute('aria-expanded',true); }
+  });
+});
+pX.addEventListener('click',()=>setMore(!panel.classList.contains('is-more')));
+
+/* ---------- before / after ---------- */
+const ba=document.getElementById('ba'), rng=ba.querySelector('input');
+rng.addEventListener('input',()=>ba.style.setProperty('--p',rng.value+'%'));
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+  new IntersectionObserver((e,o)=>{ if(!e[0].isIntersecting) return; o.disconnect();
+    const t0=performance.now(); (function f(t){ const k=Math.min(1,(t-t0)/1600), v=50+34*Math.sin(k*Math.PI*2)*(1-k); ba.style.setProperty('--p',v+'%'); rng.value=v; if(k<1) requestAnimationFrame(f); })(t0);
+  },{threshold:.6}).observe(ba);
+}
+
+/* ---------- where am I in the ground ---------- */
+const ground=document.getElementById('ground'), layers=[...ground.querySelectorAll('.layer')].map(el=>({el,name:el.dataset.name,y:el.dataset.y.split(',').map(Number),theme:el.dataset.theme}));
+const here=document.getElementById('tabLayer'), core=document.getElementById('core'), theme=document.querySelector('meta[name=theme-color]')||{content:''};
+const concept=document.getElementById('concept'), setBh=()=>document.documentElement.style.setProperty('--bh',concept.offsetHeight+'px');
+setBh(); addEventListener('resize',setBh);
+const layerName=n=>lang==='hu'?(LAYER_HU[n]||n):n;
+let ticking=false, last='';
+function locate(){
+  ticking=false;
+  const mid=innerHeight*.5, g=ground.getBoundingClientRect(), inside=g.top<mid&&g.bottom>mid;
+  here.classList.toggle('is-here',inside); core.classList.toggle('is-on',inside);
+  let L=null, t=0;
+  for(const l of layers){ const r=l.el.getBoundingClientRect(); if(r.top-140<=mid){ L=l; t=Math.max(0,Math.min(1,(mid-r.top)/r.height)); } }
+  const y=inside?(L?L.y[0]+(L.y[1]-L.y[0])*t:16):0, name=inside?(L?layerName(L.name):UI[lang].surface):'';
+  const top=layers.find(l=>{const r=l.el.getBoundingClientRect();return r.top<=4&&r.bottom>4});
+  const col=top?top.theme:(scrollY>ground.offsetTop+ground.offsetHeight-8?'#0D0C0A':'#F2F5EE');
+  if(theme.content!==col) theme.content=col;
+  core.style.setProperty('--y',y); here.style.setProperty('--y',y);
+  const label=name||UI[lang].layers; if(label!==last){ last=label; here.lastElementChild.textContent=label; if(name) core.lastElementChild.textContent=name; }
+}
+addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(locate); } },{passive:true});
+addEventListener('resize',locate);
+
+/* ---------- the switch ---------- */
+const EN=new Map();
+function setLang(l){
+  lang=l==='hu'?'hu':'en';
+  document.documentElement.lang=lang; document.title=UI[lang].title;
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    if(!EN.has(el)) EN.set(el,el.innerHTML);
+    const hu=HU[el.dataset.t];
+    el.innerHTML=lang==='hu'&&hu!==undefined?hu:EN.get(el);
+  });
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang));
+  paintServices(); last=''; locate(); setBh();
+  try{ localStorage.setItem('mx-lang',lang); }catch(e){}
+}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+let start='en';
+try{ if(localStorage.getItem('mx-lang')==='hu') start='hu'; }catch(e){}
+const asked=new URLSearchParams(location.search).get('lang'); if(asked==='hu'||asked==='en') start=asked;
+setLang(start);
+</script>
+</body>
+</html>
